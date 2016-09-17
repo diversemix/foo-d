@@ -1,0 +1,5 @@
+Werkzeug==0.10.4
+gunicorn==19.3.0
+flask-appconfig>=0.10
+flask-bootstrap
+flask-debug

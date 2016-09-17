@@ -1,0 +1,39 @@
+webui:
+  restart: always
+  build: ./webui
+  expose:
+    - "8000"
+  links:
+    - foo-d-service:foo-d-service
+  depends_on:
+    - foo-d-service
+  volumes:
+    - /usr/src/app/static
+  command: /usr/local/bin/gunicorn -w 2 -b :8000 app:app
+
+foo-d-service:
+  restart: always
+  build: ./service/
+  links:
+    - redis:redis
+  depends_on:
+    - redis
+
+nginx:
+  restart: always
+  build: ./nginx/
+  ports:
+    - "80:80"
+  volumes:
+    - /www/static
+  volumes_from:
+    - webui
+  links:
+    - webui:webui
+
+
+redis:
+  restart: always
+  image: redis:latest
+  ports:
+    - "6379:6379"
