@@ -25,6 +25,7 @@ Then change to the root folder then build and start with docker-compose:
  docker-compose up -d
  ```
 
+ Finally open this link in your browser: http://127.0.0.1:8080/
 
 [1]: https://docs.docker.com/engine/installation/
 [2]: https://docs.docker.com/compose/install/
