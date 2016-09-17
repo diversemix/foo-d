@@ -26,5 +26,5 @@ Then change to the root folder then build and start with docker-compose:
  ```
 
 
-[1]:  <https://docs.docker.com/engine/installation/> "Blah"
+[1]: https://docs.docker.com/engine/installation/
 [2]: https://docs.docker.com/compose/install/

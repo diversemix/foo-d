@@ -6,6 +6,8 @@ services:
         build: ./foo-d-service/
         volumes:
             - ./data:/data
+        ports:
+            - "5000:5000"
         links:
             - redis:redis
         depends_on:
@@ -14,11 +16,21 @@ services:
             - DEBUG=1
         working_dir: /usr/src/app
         command: python app.py
-        ports:
-            - "5000:5000"
 
     redis:
         restart: always
         image: redis:latest
         ports:
             - "6379:6379"
+
+    webui:
+        restart: always
+        build: ./webui
+        ports:
+        - "8080:8080"
+        links:
+        - foo-d-service:foo-d-service
+        depends_on:
+        - foo-d-service
+        working_dir: /usr/src/app
+        command: python app.py

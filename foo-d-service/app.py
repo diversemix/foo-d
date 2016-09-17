@@ -85,4 +85,4 @@ def query():
 if __name__ == '__main__':
     app = create_app() # Create the application
     app.register_blueprint(v1api, url_prefix='/v1')
-    app.run()
+    app.run(host="0.0.0.0", port=5000)

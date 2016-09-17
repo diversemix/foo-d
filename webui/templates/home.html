@@ -1,10 +1,71 @@
 {% extends "bootstrap/base.html" %}
 {% block title %}This is foo-d{% endblock %}
 
-{% block navbar %}
-
-{% endblock %}
+{% block styles -%}
+{{super()}}
+<link href="//netdna.bootstrapcdn.com/font-awesome/4.0.3/css/font-awesome.css" rel="stylesheet">
+{% endblock styles %}
 
 {% block content %}
-  <h1>Hello, foo-d</h1>
+<div class="container">
+    <div class="row">
+    <div class="jumbotron col-lg-8 col-lg-offset-2">
+
+
+      <h1 class="display-3"><i class="fa fa-cutlery fa-5" aria-hidden="true"></i> foo-d?</h1>
+      <p class="lead">Enter your postcode to find your nearest places to eat.
+      </p>
+      <div class="alert alert-info alert-dismissible" role="alert">
+          <button type="button" class="close" data-dismiss="alert" aria-label="Close"><span aria-hidden="true">&times;</span></button>
+
+          {% if results %}
+          Query took {{results.query_time_ms}} ms
+          {% else %}
+          Loaded with {{status.num_postcodes}} postcodes and {{status.num_pubs}} places to eat.
+          {% endif %}
+      </div>
+      <hr class="m-y-2">
+
+      <div class="control-group">
+        <div class="controls">
+            <form class="form form-horizontal" method="post" action="{{ url_for('frontend.index') }}">
+                <div class="well">
+                    <label for="postcode" class="control-label">Postcode</label>
+                    <input id="postcode" name="postcode" type="text"
+                            class="form-control" placeholder="KT10 9AX"/>
+
+                    <label for="radius" class="control-label">Radius (m)</label>
+                    <input id="radius" name="radius" type="text"
+                        class="form-control" placeholder="2000"/>
+                </div>
+                <div class="row pull-right">
+                    <button type="submit" class="btn btn-primary modelsubmit" href="#" role="button">Find</button>
+                </div>
+            </form>
+        </div>
+       </div>
+
+    </div>
+    </div>
+    {% if results %}
+    <div class="row">
+        <table width="80%" class="table table-bordered table-striped table-hover" id="results-table">
+            <thead>
+                <tr>
+                    <th>Place</th>
+                    <th>Distance (m)</th>
+                </tr>
+            </thead>
+            <tbody>
+            {% for item in results.pubs %}
+            <tr>
+                <td>{{item[0]}}</td>
+                <td>{{item[1]}}</td>
+            </tr>
+            {% endfor %}
+            </tbody>
+        </table>
+    </div>
+    {% endif %}
+</div>
 {% endblock %}
