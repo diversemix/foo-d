@@ -10,8 +10,12 @@ services:
             - redis:redis
         depends_on:
             - redis
+        environment:
+            - DEBUG=1
         working_dir: /usr/src/app
         command: python app.py
+        ports:
+            - "5000:5000"
 
     redis:
         restart: always

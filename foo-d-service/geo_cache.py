@@ -31,8 +31,10 @@ class GeoCache(object):
         else:
             self.__pubs = _config['pubs']
 
-        self.__num_postcodes = 0
-        self.__num_pubs = 0
+        self.num_postcodes = 0
+        self.num_pubs = 0
+        #self.__time_postcodes = None
+        #self.__time_pubs = None
 
     @classmethod
     def clean_postcode(cls, postcode):
@@ -45,8 +47,9 @@ class GeoCache(object):
         return cls.__prefix + GeoCache.clean_postcode(code)
 
     def populate(self, redis_client):
+        """ Function to read in the CSV files and populate redis. """
         logging.info("Populating cache with postcodes")
-        with open(self.__postcodes, 'rb') as f:
+        with open(self.__postcodes, 'r') as f:
             reader = csv.reader(f)
             for row in reader:
                 # Validate the row
@@ -58,12 +61,12 @@ class GeoCache(object):
                                      Decimal(row[3]),
                                      Decimal(row[4]),
                                      code)
-                self.__num_postcodes += 1
+                self.num_postcodes += 1
 
-        logging.info("Finished reading %d postcodes", self.__num_postcodes)
+        logging.info("Finished reading %d postcodes", self.num_postcodes)
         logging.info("Populating cache with pubs")
 
-        with open(self.__pubs, 'rb') as f:
+        with open(self.__pubs, 'r') as f:
             reader = csv.reader(f)
             for row in reader:
                 if len(row) != 2:
@@ -79,11 +82,11 @@ class GeoCache(object):
                     _lat, _long = locations[0]
                     # Now add this pub
                     redis_client.geoadd(self.__locations, _lat, _long, name)
-                    self.__num_pubs += 1
+                    self.num_pubs += 1
                 else:
                     logging.error("*** SKIPPING *** Could not find position for: %s", postcode)
 
-        logging.info("Finished reading %d pubs", self.__num_pubs)
+        logging.info("Finished reading %d pubs", self.num_pubs)
 
     def get_pubs_here(self, redis_client, postcode, radius):
         """Main function to get the pubs in a given radius.
@@ -100,7 +103,10 @@ class GeoCache(object):
         pubs = [ loc for loc in found if not loc[0].startswith(self.__prefix) ]
 
         time_end = time.time()
-        return pubs, (time_end - time_start) * 1000.0
+        return {
+                "pubs" : pubs,
+                "query_time_ms" : (time_end - time_start) * 1000.0
+                }
 
 
 if __name__ == '__main__':

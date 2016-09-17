@@ -1,6 +1,6 @@
 {
     "csv_files" : {
-        "postcodes" : "data/postcodes.csv",
-        "pubs" : "data/pubnames.csv"
+        "postcodes" : "/data/postcodes.csv",
+        "pubs" : "/data/pubnames.csv"
     }
 }
