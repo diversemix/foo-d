@@ -9,7 +9,7 @@ One of the non-functional requirements is that this application is easy to use. 
 
 The main functionality of the application is performed by the `foo-d-service`. This service will offer a RESTful API for any other service / application to consume.
 
-> This is deliberately separated out from the webui although it could easily be combined. This is to preserve a separation of responsibilities - no least of all because the scaling of the foo-d-service is not dependant on the scaling for the webui.
+> This is deliberately separated out from the webui although it could easily be combined. This is to preserve a separation of responsibilities - no least of all because the scaling of the foo-d-service is not dependant on the scaling for the webui. Either of these could be scaled by using HAProxy in-front of several instances in a round-robin fashion. Of course this can only be done if written in a stateless way.
 
 ## Choice of Technologies
 
