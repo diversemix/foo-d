@@ -60,12 +60,13 @@ def query():
 
     params = json.loads(data)
     if 'postcode' not in params:
-        logging.error("No posstcode in request")
-        return jsonify({}), HTTP_400_BAD_REQUEST
+        error = "No posstcode in request"
+        logging.error(error)
+        return jsonify({ "error" : error}), HTTP_400_BAD_REQUEST
 
     if 'radius' not in params:
         logging.error("No radius in request")
-        return jsonify({}), HTTP_400_BAD_REQUEST
+        return jsonify({ "error" : error}), HTTP_400_BAD_REQUEST
 
     postcode = params['postcode']
     radius = params['radius']
@@ -75,8 +76,7 @@ def query():
                 radius)
         code = HTTP_200_OK
     except redis.exceptions.ResponseError as err:
-        results = str(err)
-        code = HTTP_400_BAD_REQUEST
+        return jsonify({ "error" : str(err)}), HTTP_400_BAD_REQUEST
 
     return jsonify(results=results), code
 

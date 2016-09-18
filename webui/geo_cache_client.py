@@ -26,7 +26,7 @@ class GeoCacheClient(object):
         if resp.ok:
             value = resp.json()
         else:
-            value = "error: "  + str(resp.raise_for_status())
+            value = str(resp.json())
         return value
 
     def status(self):
@@ -35,4 +35,4 @@ class GeoCacheClient(object):
     def query(self, postcode, radius):
         data = { "postcode" : postcode, "radius" : radius}
         value = self._post('query', data)
-        return value['results'] if 'results' in value else None
+        return value['results'] if 'results' in value else value

@@ -25,12 +25,17 @@ frontend = Blueprint('frontend', __name__)
 def index():
     status = current_app.client.status()
     results = {}
+    error = ""
     if request.method == 'POST':
         postcode = request.form['postcode']
         radius = request.form['radius']
         results = current_app.client.query(postcode, radius)
+        if isinstance(results, str):
+            error = results
+            results = None
 
-    return render_template('home.html', status=status, results=results)
+
+    return render_template('home.html', status=status, results=results, error=error)
 
 app = create_app()
 
