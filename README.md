@@ -27,5 +27,8 @@ Then change to the root folder then build and start with docker-compose:
 
  Finally open this link in your browser: http://127.0.0.1:8080/
 
+## Loading other data files
+
+The configuration for the application is stored within the `data` directory. This contains the names of the csv files that will be used when the foo-d-service is loaded. You may wish to add files to this folder and make sure that you reference them within the configuration file: `config.json`
 [1]: https://docs.docker.com/engine/installation/
 [2]: https://docs.docker.com/compose/install/
