@@ -32,3 +32,7 @@ It just assumes that the Earth is a sphere, since the used distance formula is t
 ## Future Enhancements
 
 * The use of the Google Maps API - the distances calculated currently are "as the crow flies" this does not take into account things like rivers, roads etc that is more real world. Using the Google Maps API would mean that the *actual* distances could be measured and therefore be of more use.
+
+* More tests - there are one or two tests in here, but no where near enough for production quality. Any code that goes into production should have enough tests in that any developer working on the code would feel confident that any bugs they introduce through any change they make would be picked up. Tests also mean that you can progress to Continuous Integration and then to Dontinuous Deployment. (see https://github.com/diversemix/beefpi )
+
+* More testing - there are issues with the code, but that is a reflection of its maturity.
