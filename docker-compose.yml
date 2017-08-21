@@ -34,3 +34,14 @@ services:
         - foo-d-service
         working_dir: /usr/src/app
         command: python app.py
+
+    nginx:
+        restart: always
+        build: ./nginx/
+        ports:
+        - "80:80"
+        volumes:
+        - ./static:/usr/share/nginx/html
+        links:
+        - webui:webui
+
