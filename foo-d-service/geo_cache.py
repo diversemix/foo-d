@@ -33,8 +33,6 @@ class GeoCache(object):
 
         self.num_postcodes = 0
         self.num_pubs = 0
-        #self.__time_postcodes = None
-        #self.__time_pubs = None
 
     @classmethod
     def clean_postcode(cls, postcode):
@@ -56,11 +54,11 @@ class GeoCache(object):
                 if len(row) != 5:
                     raise ValueError(self.__error_fmt.format(self.__postcodes))
                 code = GeoCache.get_postcode(row[0])
+                lat = row[3].encode('utf-8')
+                long = row[4].encode('utf-8')
                 # Now add this postcode
                 redis_client.geoadd( self.__locations,
-                                     Decimal(row[3]),
-                                     Decimal(row[4]),
-                                     code)
+                                     lat, long, code)
                 self.num_postcodes += 1
 
         logging.info("Finished reading %d postcodes", self.num_postcodes)
@@ -96,8 +94,12 @@ class GeoCache(object):
         time_start = time.time()
 
         code = GeoCache.get_postcode(postcode)
-        found = redis_client.georadiusbymember(self.__locations, code,
+
+        found_encoded = redis_client.georadiusbymember(self.__locations, code,
                     radius, withdist=True, unit='m', sort='ASC')
+
+        # We now need to decode the string of the location.
+        found = [ [x[0].decode(), x[1]] for x in found_encoded ]
 
         # filter out the postcode centres
         pubs = [ loc for loc in found if not loc[0].startswith(self.__prefix) ]
